@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live estimates of electricity, water, carbon, and infrastructure supporting artificial intelligence worldwide — with Virginia grid impact tracking.">
+  <title>WattsOwed — AI Impact Observatory</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="site-wrap">
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
+<nav class="top-nav">
+  <div class="site-logo">WattsOwed<span class="logo-slash">/</span><span class="logo-sub">AI Observatory</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showTab('home')">Overview</button>
+    <button class="nav-btn" onclick="showTab('impact')">Global Impact</button>
+    <button class="nav-btn" onclick="showTab('virginia')">Virginia Grid</button>
+    <button class="nav-btn" onclick="showTab('companies')">AI Companies</button>
+    <button class="nav-btn" onclick="showTab('trends')">Trends</button>
+    <button class="nav-btn" onclick="showTab('policy')">Policy</button>
+    <button class="nav-btn" onclick="showTab('sources')">Sources</button>
+  </div>
+  <div class="nav-right">
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <span id="nav-clock" style="font-family:var(--font-m);font-size:0.6rem;color:var(--text-3);"></span>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-icon" title="Toggle theme">☀️</button>
+  </div>
+</nav>
+
+<!-- ── TICKER ────────────────────────────────────────────── -->
+<div class="ticker-bar">
+  <div class="ticker-label">Live</div>
+  <div class="ticker-scroll"><div class="ticker-inner">
+    AI projected to use <strong>1,000+ TWh</strong> globally in 2026 (IEA)<span class="sep">·</span>
+    VA PJM capacity costs <strong>+833%</strong> in one year<span class="sep">·</span>
+    Global data center capacity growing <strong>+26%/yr</strong><span class="sep">·</span>
+    60 VA data centers caused a near-miss grid failure <strong>Mar 2025</strong><span class="sep">·</span>
+    Microsoft committed <strong>$80B</strong> to data centers in 2025<span class="sep">·</span>
+    AI training a single large model ≈ lifetime emissions of <strong>5 cars</strong><span class="sep">·</span>
+    Reserve margin now <strong>18.9%</strong> and falling in VA<span class="sep">·</span>
+    VA residential bills up <strong>$11.24/mo</strong> starting 2026<span class="sep">·</span>
+    AI projected to use <strong>1,000+ TWh</strong> globally in 2026 (IEA)<span class="sep">·</span>
+    VA PJM capacity costs <strong>+833%</strong> in one year<span class="sep">·</span>
+    Global data center capacity growing <strong>+26%/yr</strong><span class="sep">·</span>
+    60 VA data centers caused a near-miss grid failure <strong>Mar 2025</strong><span class="sep">·</span>
+    Microsoft committed <strong>$80B</strong> to data centers in 2025<span class="sep">·</span>
+    AI training a single large model ≈ lifetime emissions of <strong>5 cars</strong><span class="sep">·</span>
+    Reserve margin now <strong>18.9%</strong> and falling in VA<span class="sep">·</span>
+    VA residential bills up <strong>$11.24/mo</strong> starting 2026<span class="sep">·</span>
+  </div></div>
+</div>
+
+<!-- ══════════════════════ HOME ══════════════════════════ -->
+<div id="tab-home" class="page active">
+
+  <div class="hero">
+    <div class="hero-eyebrow">AI Impact Observatory · Live Estimates · 2026</div>
+    <h1 class="hero-title">Understanding AI's<br><em>Real-World Impact</em></h1>
+    <p class="hero-sub">Live estimates of the electricity, water, carbon, compute, and infrastructure supporting artificial intelligence — worldwide and in Virginia.</p>
+
+    <div class="hero-metrics">
+      <div class="hm-card"><div class="hm-icon">⚡</div><div class="hm-num" id="hc-prompts">—</div><div class="hm-label">AI Prompts Today</div></div>
+      <div class="hm-card"><div class="hm-icon">🔌</div><div class="hm-num" id="hc-elec">—</div><div class="hm-label">Electricity Consumed Today</div></div>
+      <div class="hm-card"><div class="hm-icon">💧</div><div class="hm-num" id="hc-water">—</div><div class="hm-label">Water Consumed Today</div></div>
+      <div class="hm-card"><div class="hm-icon">🌫️</div><div class="hm-num" id="hc-co2">—</div><div class="hm-label">CO₂ Emitted Today</div></div>
+      <div class="hm-card"><div class="hm-icon">🖥️</div><div class="hm-num" id="hc-gpu">—</div><div class="hm-label">GPU Hours Today</div></div>
+      <div class="hm-card"><div class="hm-icon">🖼️</div><div class="hm-num" id="hc-images">—</div><div class="hm-label">AI Images Generated Today</div></div>
+      <div class="hm-card"><div class="hm-icon">👤</div><div class="hm-num" id="hc-users">—</div><div class="hm-label">New AI Users Today</div></div>
+      <div class="hm-card" style="cursor:pointer" onclick="showTab('virginia')">
+        <div class="hm-icon">🗺️</div>
+        <div class="hm-num" style="font-size:0.75rem;color:var(--amber)">Virginia</div>
+        <div class="hm-label">Explore VA Grid →</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="section-head">
+      <div><div class="section-title">What the numbers actually mean</div></div>
+      <div class="section-sub">Every metric with real-world context</div>
+    </div>
+
+    <div class="metric-cards">
+
+      <!-- ELECTRICITY -->
+      <div class="metric-card">
+        <div class="mc-top">
+          <div class="mc-label">🔌 Electricity Consumed by AI — Today (Global Est.)</div>
+          <div class="mc-value" id="mc-elec-val">—<span class="mc-unit"> TWh</span></div>
+          <div class="mc-caption">~1,000 TWh/yr global AI estimate (IEA 2026 projection)</div>
+        </div>
+        <div class="mc-context">
+          <div class="mc-context-title">So what does that actually mean?</div>
+          <div class="mc-comparisons">
+            <div class="mc-cmp"><div class="mc-cmp-icon">🏠</div><div class="mc-cmp-text">Powers <strong id="ctx-homes">—</strong> average US homes for one day</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🚗</div><div class="mc-cmp-text">Charges <strong id="ctx-evs">—</strong> electric vehicles fully</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🏙️</div><div class="mc-cmp-text">Powers a city the size of <strong>Houston</strong> for several hours</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🌍</div><div class="mc-cmp-text">Equals <strong id="ctx-country">—</strong>% of the Netherlands' entire annual electricity use</div></div>
+          </div>
+          <div class="mc-confidence">
+            <span class="conf-label">Confidence</span>
+            <div class="conf-bar"><div class="conf-fill" style="width:65%"></div></div>
+            <span class="conf-pct">65%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WATER -->
+      <div class="metric-card">
+        <div class="mc-top">
+          <div class="mc-label">💧 Water Consumed by AI — Today (Global Est.)</div>
+          <div class="mc-value" id="mc-water-val">—<span class="mc-unit"> B liters</span></div>
+          <div class="mc-caption">~28 billion liters/day global estimate (UC Riverside, 2023 extrapolated)</div>
+        </div>
+        <div class="mc-context">
+          <div class="mc-context-title">So what does that actually mean?</div>
+          <div class="mc-comparisons">
+            <div class="mc-cmp"><div class="mc-cmp-icon">🏊</div><div class="mc-cmp-text">Fills <strong id="ctx-pools">—</strong> Olympic swimming pools</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🚿</div><div class="mc-cmp-text">Equivalent to <strong id="ctx-showers">—</strong> million showers</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🧑‍🤝‍🧑</div><div class="mc-cmp-text">Daily drinking water for <strong id="ctx-people">—</strong> million people</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🌾</div><div class="mc-cmp-text">Irrigates <strong>~15,000</strong> acres of farmland for one day</div></div>
+          </div>
+          <div class="mc-confidence">
+            <span class="conf-label">Confidence</span>
+            <div class="conf-bar"><div class="conf-fill" style="width:50%"></div></div>
+            <span class="conf-pct">50%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CO2 -->
+      <div class="metric-card">
+        <div class="mc-top">
+          <div class="mc-label">🌫️ CO₂ Emitted by AI — Today (Global Est.)</div>
+          <div class="mc-value" id="mc-co2-val">—<span class="mc-unit"> M kg</span></div>
+          <div class="mc-caption">~2.45M kg CO₂/day global estimate (based on IEA grid intensity + AI energy)</div>
+        </div>
+        <div class="mc-context">
+          <div class="mc-context-title">So what does that actually mean?</div>
+          <div class="mc-comparisons">
+            <div class="mc-cmp"><div class="mc-cmp-icon">🚗</div><div class="mc-cmp-text"><strong id="ctx-cars">—</strong> gasoline cars driven for an entire year</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">✈️</div><div class="mc-cmp-text"><strong id="ctx-flights">—</strong> domestic round-trip flights</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🌲</div><div class="mc-cmp-text">Would take <strong id="ctx-trees">—</strong> tree seedlings 10 years to absorb</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">🏭</div><div class="mc-cmp-text">Equals the annual emissions of <strong id="ctx-factory">—</strong> average US factories</div></div>
+          </div>
+          <div class="mc-confidence">
+            <span class="conf-label">Confidence</span>
+            <div class="conf-bar"><div class="conf-fill" style="width:55%"></div></div>
+            <span class="conf-pct">55%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMPTS -->
+      <div class="metric-card">
+        <div class="mc-top">
+          <div class="mc-label">⚡ AI Prompts Processed — Today (Global Est.)</div>
+          <div class="mc-value" id="mc-prompts-val">—<span class="mc-unit"> B</span></div>
+          <div class="mc-caption">~121 billion prompts/day global estimate (Goldman Sachs 2025, extrapolated)</div>
+        </div>
+        <div class="mc-context">
+          <div class="mc-context-title">So what does that actually mean?</div>
+          <div class="mc-comparisons">
+            <div class="mc-cmp"><div class="mc-cmp-icon">🧑‍💻</div><div class="mc-cmp-text"><strong>15 prompts</strong> for every person on earth — every day</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">📚</div><div class="mc-cmp-text">If each prompt was a book page, that's <strong>~120,000 libraries</strong> of Congress per day</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">⏱️</div><div class="mc-cmp-text">That's <strong id="ctx-per-sec">—</strong> prompts processed every second, right now</div></div>
+            <div class="mc-cmp"><div class="mc-cmp-icon">💸</div><div class="mc-cmp-text">At ~$0.002/prompt average, that's <strong>~$242M</strong> in compute cost today</div></div>
+          </div>
+          <div class="mc-confidence">
+            <span class="conf-label">Confidence</span>
+            <div class="conf-bar"><div class="conf-fill" style="width:45%"></div></div>
+            <span class="conf-pct">45%</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /metric-cards -->
+
+    <!-- PROMPT CALCULATOR -->
+    <div class="prompt-tool">
+      <div class="pt-header">
+        <div class="pt-title">Where Does My Prompt Go?</div>
+        <div class="pt-desc">Type any prompt and see its estimated resource footprint — electricity, water, carbon, and GPU time.</div>
+      </div>
+      <div class="pt-input-row">
+        <input class="pt-input" id="prompt-input" type="text" placeholder="e.g. Write me a recipe for pasta carbonara..." maxlength="200">
+        <button class="pt-btn" onclick="calcPrompt()">Estimate Impact</button>
+      </div>
+      <div class="pt-results" id="pt-results"></div>
+      <div class="note" style="margin-top:1rem;">
+        <strong>Methodology:</strong> Estimates based on average token count × per-token energy intensity from research by Patterson et al. (2021) and Luccioni et al. (2023). Complexity is estimated from prompt length. These are rough approximations with ±50% uncertainty.
+      </div>
+    </div>
+
+    <!-- AI INSIGHT -->
+    <div class="insight-box">
+      <div class="insight-head">
+        <span class="insight-tag">AI Analysis</span>
+        <span class="insight-meta">Virginia equity summary · Powered by Claude</span>
+        <button class="refresh-btn" onclick="loadAIInsight()">↻ Refresh</button>
+      </div>
+      <div class="insight-text loading" id="ai-text"><span class="spin"></span> Generating analysis...</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ GLOBAL IMPACT ═════════════════════ -->
+<div id="tab-impact" class="page">
+  <div class="content">
+
+    <div class="section-head">
+      <div><div class="section-title">Global AI Resource Impact</div></div>
+      <div class="section-sub">Worldwide estimates · Updated continuously</div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Global AI Energy 2026e</div>
+        <div class="kpi-value">~1,000<span class="unit"> TWh</span></div>
+        <div class="kpi-sub"><span class="tag-up">↑ Japan's entire annual use</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Data Center Capacity</div>
+        <div class="kpi-value">~29<span class="unit"> GW</span></div>
+        <div class="kpi-sub">+26%/yr growth rate</div>
+      </div>
+      <div class="kpi-card kpi-counter">
+        <div class="kpi-label">MWh Consumed Since Load</div>
+        <div class="kpi-value" id="dash-counter">0</div>
+        <div class="kpi-sub"><span class="tag-warn">VA data centers only</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">GPT-4 Training CO₂</div>
+        <div class="kpi-value">~500<span class="unit"> t</span></div>
+        <div class="kpi-sub">≈ 100 cars driven for a year</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">AI Water Intensity</div>
+        <div class="kpi-value">~500<span class="unit"> mL</span></div>
+        <div class="kpi-sub">Per 20-50 ChatGPT prompts</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Live Activity Feed</div><div class="panel-sub">Grid & AI infrastructure events · updates every 8s</div></div>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <div class="feed" id="activity-feed"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Virginia Peak Load Growth</div><div class="panel-sub">MW · EIA Hourly Grid Monitor · Dominion Zone</div></div>
+          <span class="badge badge-alert">Critical</span>
+        </div>
+        <div class="panel-body">
+          <div class="bar-chart" id="loadChart"></div>
+          <div class="note"><strong>Context:</strong> VA commercial electricity sales grew ~30M MWh faster than any other state 2019–2025. PJM projects +5.4%/yr peak growth through 2030.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Dominion 2026 Generation Mix</div><div class="panel-sub">Installed capacity by source</div></div>
+          <span class="badge badge-warn">60% Fossil</span>
+        </div>
+        <div class="panel-body">
+          <div class="donut-layout">
+            <div class="donut-wrap">
+              <canvas id="donutCanvas" width="140" height="140"></canvas>
+              <div class="donut-center"><div class="donut-pct">60%</div><div class="donut-pct-label">Fossil+</div></div>
+            </div>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">PJM Capacity Auction Costs</div><div class="panel-sub">Annual clearing total ($ billions)</div></div>
+          <span class="badge badge-alert">+833% Spike</span>
+        </div>
+        <div class="panel-body">
+          <canvas id="auctionChart" height="155"></canvas>
+          <div class="note"><strong>Cap hit:</strong> 2026–27 cleared at FERC cap of $329.17/MW-day. Without the cap, projected 18% higher.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ VIRGINIA GRID ═════════════════════ -->
+<div id="tab-virginia" class="page">
+  <div class="content">
+
+    <div class="section-head">
+      <div><div class="section-title">Virginia AI Grid Impact</div></div>
+      <div class="section-sub">Virginia Beach, VA · Independent Research · Grades 11–12</div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">Data Center Consumption</div>
+        <div class="kpi-value">25–30<span class="unit"> TWh/yr</span></div>
+        <div class="kpi-sub"><span class="tag-up">~25% of all VA electricity</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">PJM Auction Cost Spike</div>
+        <div class="kpi-value">833<span class="unit">%</span></div>
+        <div class="kpi-sub"><span class="tag-up">$2.2B → $14.7B</span> · one year</div>
+      </div>
+      <div class="kpi-card kpi-counter">
+        <div class="kpi-label">Est. MWh Since Page Load</div>
+        <div class="kpi-value" id="dash-counter-va">0</div>
+        <div class="kpi-sub"><span class="tag-warn">~2,850 MW avg draw</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Residential Rate Increase</div>
+        <div class="kpi-value">$11<span class="unit">/mo</span></div>
+        <div class="kpi-sub"><span class="tag-up">SCC-approved · eff. 2026</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Winter Peak Load Growth</div>
+        <div class="kpi-value">+45<span class="unit">%</span></div>
+        <div class="kpi-sub">2019 → 2025–26 · 25,413 MW</div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-head">
+        <span class="insight-tag">AI Analysis</span>
+        <span class="insight-meta">Virginia equity summary · Powered by Claude</span>
+        <button class="refresh-btn" onclick="loadAIInsight()">↻ Refresh</button>
+      </div>
+      <div class="insight-text" id="ai-text-va" style="font-size:0.82rem;color:var(--text-2);line-height:1.8;font-weight:300;">Loading...</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">EIA — Virginia Commercial Electricity Sales</div><div class="panel-sub">EIA Open Data API · refreshes every 5 min</div></div>
+          <span class="badge badge-live">EIA API</span>
+        </div>
+        <div class="panel-body">
+          <div id="eia-panel"><div class="loading-state"><span class="spin"></span>Fetching from EIA Open Data...</div></div>
+          <canvas id="eiaLineChart" height="130" style="margin-top:0.75rem;"></canvas>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Grid Reliability Risk</div><div class="panel-sub">Composite: reserve margin, growth rate, incidents</div></div>
+          <span class="badge badge-alert">High Risk</span>
+        </div>
+        <div class="panel-body">
+          <div class="gauge-section">
+            <canvas id="gaugeCanvas" width="260" height="140"></canvas>
+            <div class="gauge-risk-label">High</div>
+            <div class="gauge-desc">Reserve margin 18.9% · Near-miss Mar 2025 · PJM load growth exceeds planning assumptions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Peak Demand Forecast · Dominion Zone</div><div class="panel-sub">Actual 2019–2025 + PJM projection (5.4%/yr) through 2030</div></div><span class="badge badge-warn">Projection</span></div>
+        <div class="panel-body"><canvas id="forecastChart" height="165"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Who Pays? — Rate Impact by Stakeholder</div><div class="panel-sub">Policy scenarios · 2025–2026</div></div><span class="badge badge-warn">Watch</span></div>
+        <table class="data-table">
+          <thead><tr><th>Scenario</th><th>Residential</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>SCC Approval · Nov 2025</td><td class="t-neg">+$11.24/mo</td><td><span class="pill pill-red">In Effect</span></td></tr>
+            <tr><td>GS-5 Tariff (≥25 MW)</td><td class="t-pos">Shielded</td><td><span class="pill pill-green">Active</span></td></tr>
+            <tr><td>Sen. Lucas Bill</td><td class="t-pos">−$5.50/mo</td><td><span class="pill pill-amber">In Conference</span></td></tr>
+            <tr><td>JLARC Dec 2024</td><td class="t-warn">At risk</td><td><span class="pill pill-amber">Key Report</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><div><div class="panel-title">Key Grid Thresholds</div><div class="panel-sub">Current operating levels vs. limits</div></div></div>
+      <div class="panel-body" id="threshold-bars"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ COMPANIES ════════════════════════ -->
+<div id="tab-companies" class="page">
+  <div class="content">
+
+    <div class="section-head">
+      <div><div class="section-title">AI Company Resource Estimates</div></div>
+      <div class="section-sub">Annual estimates · Sources: IEA, company disclosures, Goldman Sachs, research papers</div>
+    </div>
+
+    <div class="company-grid" id="company-grid"></div>
+
+    <div class="note" style="margin-bottom:1.5rem;">
+      <strong>Disclaimer:</strong> All figures are estimates based on publicly available research, company sustainability reports, and analyst projections. Actual figures vary significantly and most companies do not disclose AI-specific energy use separately. Confidence level: Low–Medium (30–55%). Sources: IEA AI Energy report 2026, Goldman Sachs AI Infrastructure report 2025, Luccioni et al. 2023.
+    </div>
+
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-head">
+        <div><div class="panel-title">Estimated Annual Energy Use by Company</div><div class="panel-sub">TWh/yr · approximate · bars scaled proportionally</div></div>
+      </div>
+      <div class="panel-body">
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Amazon</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:#f5a623;animation-delay:0s">~30 TWh/yr</div></div><div class="bar-val">~30 TWh</div></div>
+          <div class="bar-row"><div class="bar-label">Google</div><div class="bar-track"><div class="bar-fill" style="width:83%;background:#4b8cf7;animation-delay:0.07s">~25 TWh/yr</div></div><div class="bar-val">~25 TWh</div></div>
+          <div class="bar-row"><div class="bar-label">Microsoft</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:#2dd4bf;animation-delay:0.14s">~18 TWh/yr</div></div><div class="bar-val">~18 TWh</div></div>
+          <div class="bar-row"><div class="bar-label">Meta</div><div class="bar-track"><div class="bar-fill" style="width:40%;background:#a78bfa;animation-delay:0.21s">~12 TWh/yr</div></div><div class="bar-val">~12 TWh</div></div>
+          <div class="bar-row"><div class="bar-label">OpenAI</div><div class="bar-track"><div class="bar-fill" style="width:4.3%;background:#34d399;animation-delay:0.28s">~1.3 TWh/yr</div></div><div class="bar-val">~1.3 TWh</div></div>
+          <div class="bar-row"><div class="bar-label">Anthropic</div><div class="bar-track"><div class="bar-fill" style="width:1.3%;background:#f06060;animation-delay:0.35s">~0.4 TWh</div></div><div class="bar-val">~0.4 TWh</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ TRENDS ════════════════════════════ -->
+<div id="tab-trends" class="page">
+  <div class="content">
+
+    <div class="section-head">
+      <div><div class="section-title">Historical Trends & Projections</div></div>
+      <div class="section-sub">2018–2030 · AI infrastructure growth</div>
+    </div>
+
+    <div class="trend-panel">
+      <div class="trend-tabs">
+        <button class="trend-tab active" data-trend="energy"      onclick="showTrend('energy');window._activeTrend='energy'">Energy (TWh)</button>
+        <button class="trend-tab"         data-trend="water"       onclick="showTrend('water');window._activeTrend='water'">Water (B L)</button>
+        <button class="trend-tab"         data-trend="datacenters" onclick="showTrend('datacenters');window._activeTrend='datacenters'">Data Centers (GW)</button>
+      </div>
+      <div class="trend-body">
+        <canvas id="trend-canvas" height="200"></canvas>
+        <div class="note" style="margin-top:0.75rem;"><strong>Sources:</strong> IEA Global Energy and AI report (2026) · Uptime Institute Global Data Center Survey (2025) · Goldman Sachs AI Infrastructure Outlook (2025) · Masanet et al. (2020). Projections to 2026e use trend extrapolation.</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Estimated VA Data Center MW Draw</div><div class="panel-sub">Continuous load estimate · 2015–2026</div></div></div>
+        <div class="panel-body"><canvas id="drawChart" height="150"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">VA Peak Demand Forecast</div><div class="panel-sub">Actual + PJM 5.4%/yr projection through 2030</div></div></div>
+        <div class="panel-body"><canvas id="forecastChart2" height="150"></canvas></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ POLICY ════════════════════════════ -->
+<div id="tab-policy" class="page">
+  <div class="content">
+
+    <div class="section-head">
+      <div><div class="section-title">Policy & Regulatory Landscape</div></div>
+      <div class="section-sub">Virginia · 2024–2026</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Regulatory Timeline</div><div class="panel-sub">Key actions shaping cost allocation</div></div></div>
+        <div class="panel-body"><div class="timeline" id="policy-timeline"></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title">Stakeholder Positions</div><div class="panel-sub">Who wants what — and why</div></div></div>
+        <div class="panel-body" id="stakeholder-grid"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><div><div class="panel-title">Forward-Looking Risk Factors</div><div class="panel-sub">2026–2027</div></div><span class="badge badge-alert">Monitor</span></div>
+      <div class="panel-body" id="risk-factors"></div>
+    </div>
+
+    <div class="panel" style="margin-bottom:1.5rem;">
+      <div class="panel-head"><div><div class="panel-title">Community Impact</div><div class="panel-sub">Beyond the balance sheet</div></div></div>
+      <div class="panel-body">
+        <div class="impact-grid" id="impact-grid"></div>
+        <p style="font-size:0.82rem;color:var(--text-2);line-height:1.8;font-weight:300;max-width:680px;margin-top:1rem;">
+          This project exists because the costs of AI infrastructure are not evenly distributed. The companies building and operating data centers in Virginia capture enormous economic value — but the grid stress, rate increases, and environmental externalities are shared broadly, and felt most acutely by people with the least capacity to absorb them.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SOURCES ═══════════════════════════ -->
+<div id="tab-sources" class="page">
+  <div class="content">
+    <div class="cite-block">
+
+      <div class="cite-section-head">Government & Regulatory</div>
+      <div class="cite-entry"><div class="cite-n">[1]</div><div><div class="cite-title">Commercial electricity sales have soared in Virginia, driven by data centers <span class="cite-type">Gov</span></div><div class="cite-meta">U.S. Energy Information Administration · May 5, 2026<br><a href="https://www.eia.gov/todayinenergy/detail.php?id=67664" target="_blank">eia.gov/todayinenergy/detail.php?id=67664</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[2]</div><div><div class="cite-title">EIA Electricity Monthly Update — March 2026 <span class="cite-type">Gov</span></div><div class="cite-meta">U.S. Energy Information Administration · May 22, 2026<br><a href="https://www.eia.gov/electricity/monthly/update/end-use.php" target="_blank">eia.gov/electricity/monthly/update/end-use.php</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[3]</div><div><div class="cite-title">EIA Open Data API v2 — Electricity Retail Sales <span class="cite-type">Gov</span> <span class="cite-type primary">Primary Data</span></div><div class="cite-meta">U.S. Energy Information Administration · Live API · <a href="https://www.eia.gov/opendata/" target="_blank">eia.gov/opendata/</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[4]</div><div><div class="cite-title">JLARC Study: Data Centers and Virginia's Electric Grid <span class="cite-type">Gov</span> <span class="cite-type primary">Key Report</span></div><div class="cite-meta">Virginia JLARC · December 2024 · <a href="https://jlarc.virginia.gov" target="_blank">jlarc.virginia.gov</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[5]</div><div><div class="cite-title">Virginia SCC — Dominion Rate Case Order <span class="cite-type">Gov</span></div><div class="cite-meta">Virginia State Corporation Commission · November 2025 · <a href="https://www.scc.virginia.gov" target="_blank">scc.virginia.gov</a></div></div></div>
+
+      <div class="cite-section-head">Academic & Think Tank</div>
+      <div class="cite-entry"><div class="cite-n">[6]</div><div><div class="cite-title">Electricity 2025 — Analysis and forecast to 2027 <span class="cite-type">Academic</span></div><div class="cite-meta">International Energy Agency (IEA) · 2025 · Global AI energy consumption projections<br><a href="https://www.iea.org/reports/electricity-2025" target="_blank">iea.org/reports/electricity-2025</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[7]</div><div><div class="cite-title">AI, Data Centers, and the U.S. Electric Grid: A Watershed Moment <span class="cite-type">Academic</span></div><div class="cite-meta">Belfer Center, Harvard Kennedy School · February 10, 2026<br><a href="https://www.belfercenter.org/research-analysis/ai-data-centers-us-electric-grid" target="_blank">belfercenter.org/research-analysis/ai-data-centers-us-electric-grid</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[8]</div><div><div class="cite-title">Power Hungry Processing: Watts Driving the Cost of AI Deployment <span class="cite-type">Academic</span></div><div class="cite-meta">Luccioni, Viguier, Ligozat (2023) · Per-inference energy and carbon estimates<br><a href="https://arxiv.org/abs/2311.16863" target="_blank">arxiv.org/abs/2311.16863</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[9]</div><div><div class="cite-title">Making AI Less "Thirsty": Uncovering and Addressing the Secret Water Footprint of AI Models <span class="cite-type">Academic</span></div><div class="cite-meta">Li, Yang, Islam, Ren · UC Riverside (2023) · Water consumption methodology<br><a href="https://arxiv.org/abs/2304.03271" target="_blank">arxiv.org/abs/2304.03271</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[10]</div><div><div class="cite-title">Virginia's New Data Center Electricity Rate Class <span class="cite-type">Think Tank</span></div><div class="cite-meta">American Action Forum · January 8, 2026 · 833% PJM auction surge, community resistance<br><a href="https://www.americanactionforum.org/insight/virginias-new-data-center-electricity-rate-class/" target="_blank">americanactionforum.org/insight/virginias-new-data-center-electricity-rate-class/</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[11]</div><div><div class="cite-title">Data Centers and Large-Scale Electric Growth: Virginia and Texas <span class="cite-type">Academic</span></div><div class="cite-meta">Belfer Center, Harvard Kennedy School · April 20, 2026<br><a href="https://www.belfercenter.org/research-analysis/data-centers-texas-virginia-comparison" target="_blank">belfercenter.org/research-analysis/data-centers-texas-virginia-comparison</a></div></div></div>
+
+      <div class="cite-section-head">News & Industry</div>
+      <div class="cite-entry"><div class="cite-n">[12]</div><div><div class="cite-title">More Data Centers Equal More Electricity Demand <span class="cite-type">News</span></div><div class="cite-meta">Virginia Business · April 1, 2026<br><a href="https://virginiabusiness.com/virginia-data-centers-electricity-demand-surge/" target="_blank">virginiabusiness.com/virginia-data-centers-electricity-demand-surge/</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[13]</div><div><div class="cite-title">Generative AI to Become a Major Consumer of Energy <span class="cite-type">Industry</span></div><div class="cite-meta">Goldman Sachs Research · May 2024 · Global prompt volume and energy estimates<br><a href="https://www.goldmansachs.com/insights/articles/generative-ai-to-become-a-major-consumer-of-energy" target="_blank">goldmansachs.com/insights/articles/generative-ai-to-become-a-major-consumer...</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[14]</div><div><div class="cite-title">Data Center Power Consumption by State 2026 <span class="cite-type">Industry</span></div><div class="cite-meta">Electric Choice · March 18, 2026<br><a href="https://www.electricchoice.com/blog/datacenters-electricity/" target="_blank">electricchoice.com/blog/datacenters-electricity/</a></div></div></div>
+      <div class="cite-entry"><div class="cite-n">[15]</div><div><div class="cite-title">Virginia narrowly avoided power cuts when 60 data centers dropped off the grid at once <span class="cite-type">News</span></div><div class="cite-meta">Data Center Dynamics · March 20, 2025<br><a href="https://www.datacenterdynamics.com" target="_blank">datacenterdynamics.com</a></div></div></div>
+
+      <div class="method-box">
+        <h3>Methodology & Transparency</h3>
+        <p><strong style="color:var(--text-2)">Global counters:</strong> Live estimates use the following annual baselines divided to per-second rates: Energy ~1,000 TWh/yr (IEA 2026 projection); Water ~10.2T L/yr (UC Riverside extrapolated); CO₂ ~895M kg/yr (IEA grid intensity × energy); Prompts ~44T/yr (Goldman Sachs extrapolated). All figures have wide uncertainty ranges (±30–60%).</p>
+        <p><strong style="color:var(--text-2)">Prompt calculator:</strong> Per-token estimates from Luccioni et al. (2023). Energy: 0.001–0.01 Wh/query. Water: 10–60 mL/query. CO₂: 0.3–3g/query. Complexity estimated from token count. Confidence: Low (±50%).</p>
+        <p><strong style="color:var(--text-2)">Company estimates:</strong> Derived from company sustainability reports, IEA data, Goldman Sachs analyst reports, and extrapolation. AI-specific energy not separately disclosed by most companies. Confidence: Low–Med (30–55%).</p>
+        <p><strong style="color:var(--text-2)">Virginia EIA data:</strong> Queries EIA Open Data API endpoint <code>electricity/retail-sales</code> with <code>stateid=VA&sectorid=COM</code>. Free key at <a href="https://www.eia.gov/opendata/" target="_blank">eia.gov/opendata</a>. Add to <code>js/data.js</code>.</p>
+        <p><strong style="color:var(--text-2)">Independence:</strong> Independent student research project. No affiliation with Dominion Energy, PJM, any data center operator, or AI company. All data from public sources.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <p>WattsOwed · AI Impact Observatory · Independent Research · Kempsville High School · Virginia Beach, VA<br>
+  Data: <a href="https://www.eia.gov" target="_blank">EIA</a> · <a href="https://www.pjm.com" target="_blank">PJM</a> · <a href="https://www.iea.org" target="_blank">IEA</a> · <a href="https://www.scc.virginia.gov" target="_blank">VA SCC</a> · <a href="https://www.belfercenter.org" target="_blank">Belfer</a> · JLARC · Goldman Sachs · UC Riverside</p>
+  <p>Auto-refreshes every 5 min · <a href="#" onclick="showTab('sources');return false;">Full sources →</a> · <a href="#" onclick="showTab('home');return false;">↑ Top</a></p>
+</footer>
+
+</div>
+<script src="js/main.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/data.js"></script>
+<script>
+// Context calculations for metric cards
+function updateContextualMetrics() {
+  const midnight = new Date(); midnight.setHours(0,0,0,0);
+  const sinceDay = (Date.now() - midnight.getTime()) / 1000;
+
+  const elec_twh = sinceDay * 0.0116;
+  const water_l  = sinceDay * 889;
+  const co2_kg   = sinceDay * 28.4;
+  const prompts  = sinceDay * 1400;
+
+  const set = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+
+  // Update hero metric card values
+  set('mc-elec-val',    elec_twh.toFixed(3));
+  set('mc-water-val',   (water_l/1e9).toFixed(3));
+  set('mc-co2-val',     (co2_kg/1e6).toFixed(3));
+  set('mc-prompts-val', (prompts/1e9).toFixed(2));
+
+  // Electricity context
+  const kwh = elec_twh * 1e9;
+  set('ctx-homes',   Math.round(kwh/30).toLocaleString());       // avg US home ~30 kWh/day
+  set('ctx-evs',     Math.round(kwh/75).toLocaleString());       // avg EV ~75 kWh/charge
+  set('ctx-country', (elec_twh/300*100).toFixed(1));             // Netherlands ~300 TWh/yr
+
+  // Water context
+  set('ctx-pools',   Math.round(water_l/2500000).toLocaleString()); // Olympic pool ~2.5M L
+  set('ctx-showers', (water_l/65/1e6).toFixed(1));               // avg shower ~65L
+  set('ctx-people',  (water_l/2/1e6).toFixed(1));                // drinking water ~2L/person/day
+
+  // CO2 context
+  set('ctx-cars',    Math.round(co2_kg/4600).toLocaleString());  // avg car ~4600 kg/yr
+  set('ctx-flights', Math.round(co2_kg/225).toLocaleString());   // domestic flight ~225 kg
+  set('ctx-trees',   Math.round(co2_kg/21.77).toLocaleString()); // tree absorbs ~21.77 kg/yr * 10
+  set('ctx-factory', Math.round(co2_kg/2000).toLocaleString());  // avg factory ~2000 kg/day
+
+  // Prompts context
+  set('ctx-per-sec', Math.round(1400).toLocaleString());
+
+  // VA counter clone
+  const MWH_PER_SEC = 25_000_000/(365.25*24*3600);
+  const elapsed = (Date.now()-window._t0||0)/1000;
+  const mwh = elapsed*MWH_PER_SEC;
+  const el2 = document.getElementById('dash-counter-va');
+  if(el2) el2.textContent = mwh<1?mwh.toFixed(3):mwh<100?mwh.toFixed(2):Math.round(mwh).toLocaleString();
+}
+
+window._t0 = Date.now();
+setInterval(updateContextualMetrics, 500);
+
+// 2nd forecast canvas alias
+document.addEventListener('DOMContentLoaded', () => {
+  const cv2 = document.getElementById('forecastChart2');
+  if(cv2) {
+    const observer = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting && typeof drawForecastChart==='function') {
+        drawForecastChart();
+        observer.disconnect();
+      }
+    });
+    observer.observe(cv2);
+  }
+  // alias forecastChart2 → reuse same data
+  setTimeout(() => {
+    if(typeof drawForecastChart==='function') {
+      const orig=document.getElementById('forecastChart');
+      const clone=document.getElementById('forecastChart2');
+      if(clone&&orig) {
+        // Draw manually for second canvas
+        const cv=clone; const {W,H}={W:cv.parentElement.clientWidth||400,H:150};
+        cv.width=W; cv.height=H;
+        // Simple copy placeholder
+        const ctx=cv.getContext('2d');
+        ctx.fillStyle='#151a27'; ctx.fillRect(0,0,W,H);
+        ctx.fillStyle='#6e8099'; ctx.font='11px JetBrains Mono'; ctx.textAlign='center';
+        ctx.fillText('See Forecast chart on Virginia tab →',W/2,H/2);
+      }
+    }
+  }, 500);
+});
+</script>
+</body>
+</html>
